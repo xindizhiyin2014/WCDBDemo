@@ -17,6 +17,8 @@ WCDB_SYNTHESIZE(Message, localID)
 WCDB_SYNTHESIZE(Message, content)
 WCDB_SYNTHESIZE(Message, createTime)
 WCDB_SYNTHESIZE(Message, modifiedTime)
+WCDB_SYNTHESIZE(Message, age)
+
 
 WCDB_PRIMARY(Message, localID)
 

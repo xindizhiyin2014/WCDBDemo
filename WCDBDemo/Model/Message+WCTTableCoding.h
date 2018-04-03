@@ -15,5 +15,7 @@ WCDB_PROPERTY(localID)
 WCDB_PROPERTY(content)
 WCDB_PROPERTY(createTime)
 WCDB_PROPERTY(modifiedTime)
+WCDB_PROPERTY(age)
+
 
 @end

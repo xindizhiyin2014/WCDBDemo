@@ -14,5 +14,7 @@
 @property(nonatomic, copy) NSString *content;
 @property(nonatomic, strong) NSDate *createTime;
 @property(nonatomic, strong) NSDate *modifiedTime;
+@property(nonatomic, assign) NSInteger age;
+
 
 @end

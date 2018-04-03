@@ -31,7 +31,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)dataArray{
     if(!_dataArray){
-        _dataArray = @[@"创建数据库",@"插入数据",@"删除数据",@"修改数据",@"查询数据",@"数据加密"];
+        _dataArray = @[@"创建数据库",@"插入数据",@"删除数据",@"修改数据",@"查询数据",@"数据加密",@"验证线程安全",@"删除table",@"添加列"];
     }
     return _dataArray;
 }
@@ -92,13 +92,28 @@
             [self encryptDBData];
         }
             break;
+        case 6:
+        {
+            [self checkThreadSafe];
+        }
+            break;
+        case 7:
+        {
+            [self deleteTable];
+        }
+            break;
+        case 8:
+        {
+            [self addTableColumn];
+        }
+            break;
             
         default:
             break;
     }
 }
 
-#pragma mark - - - - private method - - - -
+#pragma mark - - - -  创建数据库 - - - -
 - (WCTDatabase *)createDataBase{
     NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     NSString *path = [NSString stringWithFormat:@"%@/testDB.sqlite",docDir];
@@ -118,6 +133,7 @@
     return nil;
 }
 
+#pragma mark - - - - 数据库中插入数据 - - - -
 - (void)inserDataToDB{
     self.count++;
     //插入
@@ -133,41 +149,65 @@
     BOOL result = [self.database insertObject:message into:@"message"];
 }
 
+#pragma mark - - - - 从数据中删除数据 - - - -
 - (void)deleteDataToDB{
     
     BOOL result = [self.database deleteObjectsFromTable:@"message"
-                                             where:Message.localID > 0];
+                                                  where:Message.localID > 0];
 }
 
+#pragma mark - - - - 更新数据 - - - -
 - (void)updateDataToDB{
     Message *message = [[Message alloc] init];
     message.content = @"Hi jack!";
     
-BOOL result = [self.database updateAllRowsInTable:@"message"
-onProperties:Message.content
-                          withObject:message];
+    BOOL result = [self.database updateAllRowsInTable:@"message"
+                                         onProperties:Message.content
+                                           withObject:message];
 }
 
+#pragma mark - - - - 查询数据 - - - -
 - (void)searchDataFromData{
     //查询
     //SELECT * FROM message ORDER BY localID
-    NSArray<Message *> *message = [self.database getObjectsOfClass:Message.class
-                                                    fromTable:@"message"
-                                                      orderBy:Message.localID.order()];
+    NSArray<Message *> *messages = [self.database getObjectsOfClass:Message.class
+                                                          fromTable:@"message"
+                                                            orderBy:Message.localID.order()];
     
-   
-//第二种查询方法
-//    WCTTable *table = [self.database getTableOfName:@"message"
-//                                     withClass:Message.class];
-//    //查询
-//    //SELECT * FROM message ORDER BY localID
-//    NSArray<Message *> *message = [table getObjectsOrderBy:Message.localID.order()];
+    
+    //第二种查询方法
+    //    WCTTable *table = [self.database getTableOfName:@"message"
+    //                                     withClass:Message.class];
+    //    //查询
+    //    //SELECT * FROM message ORDER BY localID
+    //    NSArray<Message *> *message = [table getObjectsOrderBy:Message.localID.order()];
     
 }
 
+#pragma mark - - - - 加密数据 - - - -
 - (void)encryptDBData{
     NSData *password = [@"MyPassword" dataUsingEncoding:NSASCIIStringEncoding];
     [self.database setCipherKey:password];
+}
+
+#pragma mark - - - - 验证是否线程安全 - - - -
+- (void)checkThreadSafe{
+    _database=nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self createDataBase];
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [self searchDataFromData];
+        });
+    });
+    
+}
+
+- (void)deleteTable{
+    [self.database dropTableOfName:@"message"];
+}
+
+- (void)addTableColumn{
+    [self.database addColumn:Message.age.def(WCTColumnTypeInteger64) forTable:@"message"];
 }
 
 #pragma mark - - - - lazyLoad - - - -
@@ -184,3 +224,4 @@ onProperties:Message.content
 
 
 @end
+
