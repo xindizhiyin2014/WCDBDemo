@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "Message+WCTTableCoding.h"
+#import "TestModel+WCTTableCoding.h"
+
 
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -31,7 +33,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)dataArray{
     if(!_dataArray){
-        _dataArray = @[@"创建数据库",@"插入数据",@"删除数据",@"修改数据",@"查询数据",@"数据加密",@"验证线程安全",@"删除table",@"添加列"];
+        _dataArray = @[@"创建数据库",@"创建Message表",@"插入数据",@"删除数据",@"修改数据",@"查询数据",@"数据加密",@"验证线程安全",@"删除table",@"添加列",@"根据需要创建表"];
     }
     return _dataArray;
 }
@@ -69,42 +71,52 @@
             break;
         case 1:
         {
-            [self inserDataToDB];
+            [self createTable];
         }
             break;
         case 2:
         {
-            [self deleteDataToDB];
+            [self inserDataToDB];
         }
             break;
         case 3:
         {
-            [self updateDataToDB];
+            [self deleteDataToDB];
         }
             break;
         case 4:
         {
-            [self searchDataFromData];
+            [self updateDataToDB];
         }
             break;
         case 5:
         {
-            [self encryptDBData];
+            [self searchDataFromData];
         }
             break;
         case 6:
         {
-            [self checkThreadSafe];
+            [self encryptDBData];
         }
             break;
         case 7:
         {
-            [self deleteTable];
+            [self checkThreadSafe];
         }
             break;
         case 8:
         {
+            [self deleteTable];
+        }
+            break;
+        case 9:
+        {
             [self addTableColumn];
+        }
+            break;
+        case 10:
+        {
+            [self createTableViewCondition];
         }
             break;
             
@@ -119,18 +131,19 @@
     NSString *path = [NSString stringWithFormat:@"%@/testDB.sqlite",docDir];
     NSLog(@"DB Path %@",path);
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
+    return database;
+}
+
+- (void)createTable{
     /*
      CREATE TABLE messsage (localID INTEGER PRIMARY KEY,
      content TEXT,
      createTime BLOB,
      modifiedTime BLOB)
      */
-    BOOL result = [database createTableAndIndexesOfName:@"message"
+    BOOL result = [self.database createTableAndIndexesOfName:@"message"
                                               withClass:Message.class];
-    if (result) {
-        return database;
-    }
-    return nil;
+    
 }
 
 #pragma mark - - - - 数据库中插入数据 - - - -
@@ -202,12 +215,24 @@
     
 }
 
+#pragma mark - - - - 删除表
 - (void)deleteTable{
     [self.database dropTableOfName:@"message"];
 }
 
+#pragma mark - - - - 添加列 - - - -
 - (void)addTableColumn{
     [self.database addColumn:Message.age.def(WCTColumnTypeInteger64) forTable:@"message"];
+}
+
+#pragma mark - - - - 根据需要创建表 - - - -
+- (void)createTableViewCondition{
+    
+    [self.database createTableOfName:@"TestModel" withColumnDefList:{TestModel.modelID.def(WCTColumnTypeInteger64)}];
+    NSString *indexSubfix = @"_index";
+    NSString *indexName = [@"TestModel" stringByAppendingString:indexSubfix];
+    [self.database createIndexOfName:@"TestModel_index" withIndexList:{TestModel.modelID.index()} forTable:@"TestModel"];
+    
 }
 
 #pragma mark - - - - lazyLoad - - - -

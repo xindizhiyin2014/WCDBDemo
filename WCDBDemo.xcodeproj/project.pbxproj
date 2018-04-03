@@ -15,6 +15,7 @@
 		BDB93020206F595400F4E5FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB9301F206F595400F4E5FB /* main.m */; };
 		BDB93035206F743000F4E5FB /* Message.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB93032206F742F00F4E5FB /* Message.mm */; };
 		BDB93038206F75D500F4E5FB /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB93037206F75D500F4E5FB /* ViewController.mm */; };
+		BDB930422073A10900F4E5FB /* TestModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB930412073A10800F4E5FB /* TestModel.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,9 @@
 		BDB93033206F743000F4E5FB /* Message+WCTTableCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Message+WCTTableCoding.h"; sourceTree = "<group>"; };
 		BDB93034206F743000F4E5FB /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		BDB93037206F75D500F4E5FB /* ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		BDB9303F2073A10800F4E5FB /* TestModel+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestModel+WCTTableCoding.h"; sourceTree = "<group>"; };
+		BDB930402073A10800F4E5FB /* TestModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestModel.h; sourceTree = "<group>"; };
+		BDB930412073A10800F4E5FB /* TestModel.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TestModel.mm; sourceTree = "<group>"; };
 		F9B737328828C812B4608150 /* Pods-WCDBDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WCDBDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WCDBDemo/Pods-WCDBDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		FCAA897F1C546C756586CD99 /* Pods_WCDBDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WCDBDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -106,6 +110,9 @@
 				BDB93034206F743000F4E5FB /* Message.h */,
 				BDB93032206F742F00F4E5FB /* Message.mm */,
 				BDB93033206F743000F4E5FB /* Message+WCTTableCoding.h */,
+				BDB9303F2073A10800F4E5FB /* TestModel+WCTTableCoding.h */,
+				BDB930402073A10800F4E5FB /* TestModel.h */,
+				BDB930412073A10800F4E5FB /* TestModel.mm */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -241,6 +248,7 @@
 				BDB93038206F75D500F4E5FB /* ViewController.mm in Sources */,
 				BDB93020206F595400F4E5FB /* main.m in Sources */,
 				BDB93012206F595400F4E5FB /* AppDelegate.m in Sources */,
+				BDB930422073A10900F4E5FB /* TestModel.mm in Sources */,
 				BDB93035206F743000F4E5FB /* Message.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
