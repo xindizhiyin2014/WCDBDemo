@@ -33,7 +33,7 @@
 #pragma mark - lazyLoad
 - (NSArray *)dataArray{
     if(!_dataArray){
-        _dataArray = @[@"创建数据库",@"创建Message表",@"插入数据",@"删除数据",@"修改数据",@"查询数据",@"数据加密",@"验证线程安全",@"删除table",@"添加列",@"根据需要创建表"];
+        _dataArray = @[@"创建数据库",@"创建Message表",@"插入数据",@"删除数据",@"修改数据",@"查询数据",@"数据加密",@"验证线程安全",@"删除table",@"添加列",@"根据需要创建表",@"数据库备份",@"数据库修复模拟"];
     }
     return _dataArray;
 }
@@ -119,6 +119,16 @@
             [self createTableViewCondition];
         }
             break;
+        case 11:
+        {
+            [self configBackUpCipher];
+        }
+            break;
+        case 12:
+        {
+            [self repairDataBase];
+        }
+            break;
             
         default:
             break;
@@ -128,7 +138,7 @@
 #pragma mark - - - -  创建数据库 - - - -
 - (WCTDatabase *)createDataBase{
     NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *path = [NSString stringWithFormat:@"%@/testDB.sqlite",docDir];
+    NSString *path = [NSString stringWithFormat:@"%@/testDB",docDir];
     NSLog(@"DB Path %@",path);
     WCTDatabase *database = [[WCTDatabase alloc] initWithPath:path];
     return database;
@@ -223,6 +233,7 @@
 #pragma mark - - - - 添加列 - - - -
 - (void)addTableColumn{
     [self.database addColumn:Message.age.def(WCTColumnTypeInteger64) forTable:@"message"];
+    
 }
 
 #pragma mark - - - - 根据需要创建表 - - - -
@@ -232,6 +243,52 @@
     NSString *indexSubfix = @"_index";
     NSString *indexName = [@"TestModel" stringByAppendingString:indexSubfix];
     [self.database createIndexOfName:@"TestModel_index" withIndexList:{TestModel.modelID.index()} forTable:@"TestModel"];
+    
+}
+
+#pragma mark - - - - 开始备份操作 - - - -
+- (void)configBackUpCipher{
+    NSData *backupCipher = [@"backupCipher" dataUsingEncoding:NSASCIIStringEncoding];
+    [self.database backupWithCipher:backupCipher];
+}
+
+#pragma mark - - - - 恢复数据库操作 - - - -
+- (void)repairDataBase{
+    NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *path = [NSString stringWithFormat:@"%@/testDB",docDir];
+    [self.database close:^{//模拟数据库损坏的操作
+        FILE *file = fopen(path.UTF8String, "rb+");
+        unsigned char *zeroPage = new unsigned char[100];
+        memset(zeroPage, 0, 100);
+        fwrite(zeroPage, 100, 1, file);
+        fclose(file);
+    }];
+
+    NSLog(@"The count of objects corrupted: %lu", [self.database getAllObjectsOfClass:Message.class fromTable:@"message"].count);
+    
+    NSData *password = [@"MyPassword" dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *backupCipher = [@"backupCipher" dataUsingEncoding:NSASCIIStringEncoding];
+
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+
+        NSString *recoverPath = [NSString stringWithFormat:@"%@/recoverDB",docDir];
+        WCTDatabase * recover = [[WCTDatabase alloc] initWithPath:recoverPath];
+        NSData * password = [ @"MyPassword"  dataUsingEncoding:NSASCIIStringEncoding];
+        NSData * backupPassword = [ @"MyBackupPassword"  dataUsingEncoding:NSASCIIStringEncoding];
+        int pageSize = 4096 ; // iOS上的默认值为4096，macOS上的默认值为1024。
+        [self.database close:^ {
+           BOOL status = [recover recoverFromPath:path
+                        withPageSize:pageSize
+                        backupCipher:backupCipher
+                      databaseCipher:password];
+            
+            NSLog(@"The count of objects reCovered: %lu", [recover getAllObjectsOfClass:Message.class fromTable:@"message"].count);
+
+        }];
+    });
+    
     
 }
 

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WCDBDemo/ViewController.mm"
-            timestampString = "544450680.9486001"
+            timestampString = "544522570.771794"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "-inserDataToDB"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,12 +26,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WCDBDemo/ViewController.mm"
-            timestampString = "544450839.946421"
+            timestampString = "544522570.773087"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "-searchDataFromData"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/WCDB/objc/WCDB/core/database_repair_kit.cpp"
+            timestampString = "544522570.774214"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "Database::recoverFromPath(const std::string &amp;corruptedDBPath, const int pageSize, const void *backupKey, const unsigned int &amp;backupKeyLength, const void *databaseKey, const unsigned int &amp;databaseKeyLength, Error &amp;error)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
